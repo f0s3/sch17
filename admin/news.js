@@ -13,6 +13,7 @@ router.route('/')
   .all((req, res, next) => {
     next();
   })
+
   .get((req, res) => {
     News.find({}, '-__v', (err, news) => res.send({ news: news }));
   })
