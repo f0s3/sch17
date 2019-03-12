@@ -1,8 +1,11 @@
 const auth = require('./auth');
 const news = require('./news');
-const myApi = require('express').Router();
+const books = require('./books');
+const teachers = require('./teachers');
+const admin = require('express').Router();
 
-myApi.use('/news', news);
-myApi.use('/auth', auth);
-
-module.exports = myApi;
+admin.use('/news', news);
+admin.use('/auth', auth);
+admin.use('/books', books);
+admin.use('/teachers', teachers);
+module.exports = admin;

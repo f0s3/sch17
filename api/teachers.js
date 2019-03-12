@@ -1,21 +1,13 @@
-const express = require("express");
+const express = require('express');
 var router = express.Router();
-const Teachers = require("../models/teachers");
+const Teachers = require('../models/teachers');
 
 router.route('/')
   .all((req, res, next) => {
-      next();
+    next();
   })
   .get((req, res) => {
-      Teachers.find({}, (err, teachers) => res.send({ teachers: teachers }));
-  })
-  .post((req, res) => {
-      let teachers = new Teachers(req.body);
-      teachers.save();
-      res.send(201, { teachers: teachers })
+    Teachers.find({}, '-__v', (err, teachers) => res.send({ teachers: teachers }));
   });
 
 module.exports = router;
-
-// TODO: make idempotent requests(except DELETE)
-// TODO: move POST request to admin

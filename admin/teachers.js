@@ -1,6 +1,6 @@
 const express = require('express');
 var router = express();
-const News = require('../models/news');
+const Teacher = require('../models/teachers');
 
 let getValidationErrors = (errors) => {
   let newErrors = [];
@@ -13,44 +13,43 @@ router.route('/')
   .all((req, res, next) => {
     next();
   })
-
   .get((req, res) => {
-    News.find({}, '-__v', (err, news) => res.send({ news: news }));
+    Teacher.find({}, '-__v', (err, teachers) => res.send({ teachers: teachers }));
   })
   .post((req, res) => {
-      let news = new News(req.body);
-      news.save((err) => {
-        if (err) {
-          res.status(422).send({ errors: getValidationErrors(err.errors)});
-        } else {
-          res.status(201).send(news);
-        }
-      });
+    let teacher = new Teacher(req.body);
+    teacher.save((err) => {
+      if (err) {
+        res.status(422).send({ errors: getValidationErrors(err.errors)});
+      } else {
+        res.status(201).send(teacher);
+      }
+    });
   });
 
-router.param('newsId', (req, res, next, id) => {
-  News.findById(id, '-__v', (err, news) => { //TODO: FIX THIS
-    if (err || !news) {
+router.param('teacherId', (req, res, next, id) => {
+  Teacher.findById(id, '-__v', (err, teacher) => { //TODO: FIX THIS
+    if (err || !teacher) {
       res.status(404).send({ message: 'Not found' });
     } else {
-      req.news = news;
+      req.teacher = teacher;
     }
     next();
   });
 });
 
-router.route('/:newsId')
+router.route('/:teacherId')
   .all((req, res, next) => {
     next();
   })
   .get((req, res) => {
-    res.send(req.news);
+    res.send(req.teacher);
   })
   .put((req, res, next) => {
-    let news = req.news;
-    news.title = req.body.title;
-    news.message = req.body.message;
-    news.save((err) => {
+    let teacher = req.teacher;
+    teacher.name = req.body.name;
+    teacher.subject = req.body.subject;
+    teacher.save((err) => {
       if (err) {
         res.status(422).send({ errors: getValidationErrors(err.errors)});
       } else {
@@ -59,9 +58,9 @@ router.route('/:newsId')
     });
   })
   .delete((req, res, next) => {
-    News.deleteOne({ _id: req.news._id }, (e, r) => {
+    Teacher.deleteOne({ _id: req.teacher._id }, (e, r) => {
       if (!e) {
-        res.send({ message: `News with id ${req.news._id} was successfully deleted.` })
+        res.send({ message: `Teacher with id ${req.teacher._id} was successfully deleted.` })
       } else {
         res.status(500).send({ message: 'Something went wrong.' })
       }
