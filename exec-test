@@ -1,3 +1,3 @@
 #!/bin/sh
 
-docker-compose run api bash -c "npm run test -- --runInBand"
+docker-compose run --rm api bash -c "npm run test -- --runInBand --testPathIgnorePatterns web/ --verbose"

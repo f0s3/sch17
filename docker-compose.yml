@@ -8,8 +8,8 @@ services:
     volumes:
      - .:/src
     links:
-      - db
-  'db':
+      - mongodb
+  'mongodb':
     image: mongo
     volumes:
       - ./data:/data/db
