@@ -1,0 +1,10 @@
+version: 2
+jobs:
+  build:
+    machine: true
+
+    steps:
+      - checkout
+      - run: docker-compose build mongodb api
+      - run: docker-compose run --rm api bash -c "npm install"
+      - run: docker-compose run --rm api bash -c "npm run test -- --runInBand --testPathIgnorePatterns web/ --verbose"
