@@ -1,12 +1,10 @@
 version: 2
 jobs:
   build:
-    docker:
-      - image: debian:stretch
+    machine: true
 
     steps:
       - checkout
-
-      - run:
-          name: Run tests
-          command: ./exec-test
+      - run: docker-compose build mongodb api
+      - run: docker-compose run --rm api bash -c "npm install"
+      - run: docker-compose run --rm api bash -c "npm run test -- --runInBand --testPathIgnorePatterns web/ --verbose"
